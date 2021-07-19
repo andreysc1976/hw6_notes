@@ -1,0 +1,2 @@
+rootProject.name = "hw6_notes"
+include ':app'
