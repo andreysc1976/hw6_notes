@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NoteFullFragment" >
+
+    <TextView
+        android:id="@+id/subjectTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/noteName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dateCreateSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/noteDate"
+        app:layout_constraintStart_toStartOf="@+id/subjectTextView"
+        app:layout_constraintTop_toBottomOf="@+id/subjectTextView" />
+
+    <TextView
+        android:id="@+id/bodyTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/noteBody"
+        app:layout_constraintEnd_toEndOf="@+id/dateCreateSubject"
+        app:layout_constraintStart_toStartOf="@+id/dateCreateSubject"
+        app:layout_constraintTop_toBottomOf="@+id/dateCreateSubject" />
+
+    <TextView
+        android:id="@+id/textViewNoteName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        tools:text="name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dateCreateSubject"
+        app:layout_constraintTop_toTopOf="@+id/subjectTextView" />
+
+    <TextView
+        android:id="@+id/textViewNoteDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dateCreateSubject"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNoteName" />
+
+    <TextView
+        android:id="@+id/textViewNoteBody"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bodyTextView"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNoteDate" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
