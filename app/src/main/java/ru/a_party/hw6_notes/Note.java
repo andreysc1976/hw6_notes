@@ -13,7 +13,7 @@ public class Note {
 
     private static ArrayList<Note> notes;
 
-    private UUID uuid;
+    final private UUID uuid;
     private String name;
     private Date date;
     private String body;
@@ -70,6 +70,10 @@ public class Note {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public static void clear(){
+        notes=new ArrayList<>();
     }
 
     public static void generateDemoNotes(){

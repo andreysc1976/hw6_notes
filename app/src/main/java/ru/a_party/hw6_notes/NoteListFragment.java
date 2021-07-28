@@ -8,10 +8,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,7 +46,10 @@ public class NoteListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE;
         initView(view);
+        setHasOptionsMenu(true);
     }
+
+
 
     private void initView(View view) {
         LinearLayout linearLayout = (LinearLayout)view;
@@ -53,8 +61,10 @@ public class NoteListFragment extends Fragment {
             textView.setTextSize(24);
             linearLayout.addView(textView);
 
+
             final int finalI=i;
             textView.setOnClickListener(v -> showNote(notes.get(finalI)));
+
 
         }
 
@@ -84,5 +94,21 @@ public class NoteListFragment extends Fragment {
                 .replace(R.id.fragmentContainerNoteList,noteFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId()==R.id.itemMenuClear){
+            Toast.makeText(getActivity().getBaseContext(),"Тут должно что то очиститься",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -8,9 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -90,6 +92,27 @@ public class NoteFullFragment extends Fragment {
         view.findViewById(R.id.textViewNoteDate).setOnClickListener(v -> new DatePickerDialog(getContext(), date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        view.findViewById(R.id.textViewNoteBody).setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireActivity(),v);
+            requireActivity().getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId()==R.id.cryptElement){
+                        textViewNoteBody.setText("вафпв фвплдфв плдфп дфло пфдлопфаопфао ");
+                        return true;
+                    } else if (item.getItemId()==R.id.decryptElement){
+                        textViewNoteBody.setText(note.getBody());
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            popupMenu.show();
+
+        });
 
         return view;
     }

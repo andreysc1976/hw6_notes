@@ -5,4 +5,7 @@
     <string name="noteName">Тема</string>
     <string name="noteDate">Дата создания</string>
     <string name="noteBody">Описание</string>
+    <string name="clearMenuElement">Clear</string>
+    <string name="decryptText">DeCrypt</string>
+    <string name="cryptText">Crypt</string>
 </resources>
