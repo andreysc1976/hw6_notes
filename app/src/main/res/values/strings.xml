@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">hw6_notes</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Супер заметки ©</string>
     <string name="noteName">Тема</string>
     <string name="noteDate">Дата создания</string>
     <string name="noteBody">Описание</string>
     <string name="clearMenuElement">Clear</string>
     <string name="decryptText">DeCrypt</string>
     <string name="cryptText">Crypt</string>
+    <string name="openStr">Open</string>
+    <string name="closeStr">Close</string>
+    <string name="aboutStr">О программе</string>
+    <string name="exitStr">Exit</string>
 </resources>
