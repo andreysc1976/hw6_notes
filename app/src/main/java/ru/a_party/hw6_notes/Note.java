@@ -97,4 +97,11 @@ public class Note {
         notes.add(new Note("движемся к финишу",date2,"Осталось сдать где то около 10 контрольных и счасть наступит!!!"));
         notes.add(new Note("Ура!!!",date3,"Вот нам и выдали дипломы"));
     }
+
+    public String getFormatedDate() {
+        String result;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        result = simpleDateFormat.format(date);
+        return result;
+    }
 }
