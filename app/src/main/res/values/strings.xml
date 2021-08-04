@@ -6,4 +6,7 @@
     <string name="noteDate">Дата создания</string>
     <string name="noteBody">Описание</string>
     <string name="save">Save</string>
+    <string name="addNoteText">Добавить</string>
+    <string name="hintNoteName">Введите название заметки</string>
+    <string name="hintNoteBody">Введите описание заметки</string>
 </resources>

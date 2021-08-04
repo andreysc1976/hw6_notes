@@ -1,8 +1,12 @@
 package ru.a_party.hw6_notes;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,4 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
 }
