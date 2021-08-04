@@ -11,9 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,7 +24,7 @@ import java.util.UUID;
  * Use the {@link NoteFullFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoteFullFragment extends Fragment {
+public class NoteFullFragment extends Fragment implements NoteListFragment.NoteUpdater {
 
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -41,9 +40,11 @@ public class NoteFullFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private Note note;
 
-    private TextView textViewNoteName;
+    private EditText editTextNoteName;
     private TextView textViewNoteDate;
-    private TextView textViewNoteBody;
+    private EditText editTextNoteBody;
+
+    private NoteListFragment.NoteUpdater noteUpdater;
 
     public NoteFullFragment() {
         // Required empty public constructor
@@ -83,13 +84,21 @@ public class NoteFullFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_note_full, container, false);
-        textViewNoteName = view.findViewById(R.id.textViewNoteName);
+        editTextNoteName = view.findViewById(R.id.textViewNoteName);
         textViewNoteDate = view.findViewById(R.id.textViewNoteDate);
-        textViewNoteBody = view.findViewById(R.id.textViewNoteBody);
+        editTextNoteBody = view.findViewById(R.id.textViewNoteBody);
 
         view.findViewById(R.id.textViewNoteDate).setOnClickListener(v -> new DatePickerDialog(getContext(), date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        view.findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Note.updateNoteById(note.getUuid(),editTextNoteName.getText().toString(),note.getDate(),editTextNoteBody.getText().toString());
+                noteUpdater.update();
+            }
+        });
 
         return view;
     }
@@ -111,14 +120,24 @@ public class NoteFullFragment extends Fragment {
     };
 
     private void updateText(){
-        textViewNoteName.setText(note.getName());
+        editTextNoteName.setText(note.getName());
         textViewNoteDate.setText(format.format(note.getDate()));
-        textViewNoteBody.setText(note.getBody());
+        editTextNoteBody.setText(note.getBody());
     }
 
     @Override
     public void onViewCreated(@NonNull  View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateText();
+    }
+
+
+    public void setUpdater(NoteListFragment.NoteUpdater noteUpdater) {
+        this.noteUpdater = noteUpdater;
+    }
+
+    @Override
+    public void update() {
+        noteUpdater.update();
     }
 }

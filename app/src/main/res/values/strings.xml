@@ -5,4 +5,5 @@
     <string name="noteName">Тема</string>
     <string name="noteDate">Дата создания</string>
     <string name="noteBody">Описание</string>
+    <string name="save">Save</string>
 </resources>

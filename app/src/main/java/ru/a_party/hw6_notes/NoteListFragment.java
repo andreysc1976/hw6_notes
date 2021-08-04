@@ -6,19 +6,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.ArrayList;
+import android.widget.Toast;
 
 
 public class NoteListFragment extends Fragment {
 
     private boolean isLandscape = false;
+    private RecyclerView recyclerView;
+    private NoteListAdapter noteListAdapter;
 
     public static NoteListFragment newInstance() {
         return new NoteListFragment();
@@ -40,23 +41,14 @@ public class NoteListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE;
-        initView(view);
-    }
+        recyclerView = view.findViewById(R.id.note_recyler_view);
 
-    private void initView(View view) {
-        LinearLayout linearLayout = (LinearLayout)view;
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        noteListAdapter = new NoteListAdapter();
+        recyclerView.setAdapter(noteListAdapter);
+        noteListAdapter.setListener(position -> showNote(Note.getNotes().get(position)));
 
-        ArrayList<Note> notes = Note.getNotes();
-        for (int i=0;i<notes.size();i++){
-            TextView textView = new TextView(getContext());
-            textView.setText(notes.get(i).getName());
-            textView.setTextSize(24);
-            linearLayout.addView(textView);
 
-            final int finalI=i;
-            textView.setOnClickListener(v -> showNote(notes.get(finalI)));
-
-        }
 
     }
 
@@ -70,19 +62,25 @@ public class NoteListFragment extends Fragment {
 
 
     private void showNoteLand(Note note){
-        Fragment noteFragment = NoteFullFragment.newInstance(note);
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.landscapeContainer,noteFragment)
-                .commit();
+        NoteFullFragment noteFragment = NoteFullFragment.newInstance(note);
+        noteFragment.setUpdater(() -> noteListAdapter.notifyDataSetChanged());
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.landscapeContainer, noteFragment)
+                        .commit();
     }
 
     private void showNotePort(Note note){
-        Fragment noteFragment = NoteFullFragment.newInstance(note);
+        NoteFullFragment noteFragment = NoteFullFragment.newInstance(note);
+        noteFragment.setUpdater(() -> noteListAdapter.notifyDataSetChanged());
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainerNoteList,noteFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    interface NoteUpdater{
+        void update();
     }
 }
