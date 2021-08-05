@@ -9,10 +9,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.PopupMenu;
+
+
+import java.util.Date;
+import java.util.UUID;
 
 
 public class NoteListFragment extends Fragment {
@@ -34,6 +42,7 @@ public class NoteListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_note_list, container, false);
     }
 
@@ -46,7 +55,27 @@ public class NoteListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         noteListAdapter = new NoteListAdapter();
         recyclerView.setAdapter(noteListAdapter);
-        noteListAdapter.setListener(position -> showNote(Note.getNotes().get(position)));
+        //noteListAdapter.setListener(position -> showNote(Note.getNotes().get(position)));
+        noteListAdapter.setListener(position -> {
+            PopupMenu popupMenu = new PopupMenu(view.getContext(),view, Gravity.CENTER);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case (R.id.itemPopUpEdit):
+                            showNote(Note.getNotes().get(position));
+                            break;
+                        case(R.id.itemPopUpDelete):
+                            Note.deleteByIndex(position);
+                            noteListAdapter.notifyDataSetChanged();
+                            break;
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
+        });
 
 
 
@@ -75,9 +104,25 @@ public class NoteListFragment extends Fragment {
         noteFragment.setUpdater(() -> noteListAdapter.notifyDataSetChanged());
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainerNoteList,noteFragment)
                 .addToBackStack(null)
+                .replace(R.id.fragmentContainerNoteList,noteFragment)
                 .commit();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.list_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case (R.id.addNoteMenuItem):
+                Note note = new Note(UUID.randomUUID(),"",new Date(),"");
+                showNote(note);
+                break;
+        }
+        return true;
     }
 
     interface NoteUpdater{

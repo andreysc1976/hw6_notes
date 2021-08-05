@@ -1,6 +1,7 @@
 package ru.a_party.hw6_notes;
 
 import android.app.DatePickerDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,8 @@ import java.util.UUID;
 public class NoteFullFragment extends Fragment implements NoteListFragment.NoteUpdater {
 
     final Calendar myCalendar = Calendar.getInstance();
+
+    private boolean isLandscape = false;
 
     private static final String ARG_UUID = "uuid";
     private static final String ARG_NAME = "name";
@@ -92,16 +95,19 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        view.findViewById(R.id.buttonSave).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Note.updateNoteById(note.getUuid(),editTextNoteName.getText().toString(),note.getDate(),editTextNoteBody.getText().toString());
-                noteUpdater.update();
+        view.findViewById(R.id.buttonSave).setOnClickListener(v -> {
+            Note.updateNoteById(note.getUuid(),editTextNoteName.getText().toString(),note.getDate(),editTextNoteBody.getText().toString());
+            noteUpdater.update();
+            if (!isLandscape)
+            {
+                requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
         return view;
     }
+
+
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -128,6 +134,7 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
     @Override
     public void onViewCreated(@NonNull  View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        isLandscape = getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE;
         updateText();
     }
 

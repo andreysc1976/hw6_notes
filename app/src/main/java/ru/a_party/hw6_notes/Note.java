@@ -1,5 +1,8 @@
 package ru.a_party.hw6_notes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +12,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-public class Note {
+public class Note implements Parcelable {
 
     private static ArrayList<Note> notes;
 
@@ -29,15 +32,47 @@ public class Note {
         this.body = body;
     }
 
-    public static void updateNoteById(UUID uuid,String name,Date date,String body)
+    protected Note(Parcel in) {
+        name = in.readString();
+        body = in.readString();
+        uuid = UUID.fromString(in.readString());
+        try {
+            date = MyDateUtil.stringToDate(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
+
+    public static void updateNoteById(UUID uuid, String name, Date date, String body)
     {
+        boolean finded = false;
         for (Note note:notes) {
             if (note.getUuid().equals(uuid)){
                 note.setDate(date);
                 note.setName(name);
                 note.setBody(body);
+                finded=true;
             }
         }
+        if (!finded){
+            notes.add(new Note(uuid,name,date,body));
+        }
+    }
+
+    public static void deleteByIndex(int position) {
+        notes.remove(position);
     }
 
     public String getName() {
@@ -74,22 +109,17 @@ public class Note {
 
     public static void generateDemoNotes(){
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance();
-        Date date1;
-        Date date2;
-        Date date3;
+        Date date1 = null;
+        Date date2 = null;
+        Date date3 = null;
         try {
-            calendar.setTime(dateFormat.parse("01072021"));
-            date1 = calendar.getTime();
-            calendar.setTime(dateFormat.parse("05072021"));
-            date2 = calendar.getTime();
-            calendar.setTime(dateFormat.parse("07072021"));
-            date3 = calendar.getTime();
+            date1 = MyDateUtil.stringToDate("01072021");
+            date2 = MyDateUtil.stringToDate("02072021");
+            date3 = MyDateUtil.stringToDate("07072021");
         } catch (ParseException e) {
             e.printStackTrace();
-            return;
         }
+
         notes = new ArrayList<>();
         notes.add(new Note("Первая",date1,"Моя большая первая заметка о создание приложений для андроид \n пробуем создавать заметки"));
         notes.add(new Note("Вторая",date1,"Тяжело в учение, легко в бою"));
@@ -103,5 +133,18 @@ public class Note {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
         result = simpleDateFormat.format(date);
         return result;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(body);
+        dest.writeString(uuid.toString());
+        dest.writeString(MyDateUtil.dateToString(date));
     }
 }
