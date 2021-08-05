@@ -98,7 +98,7 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
         view.findViewById(R.id.buttonSave).setOnClickListener(v -> {
             Note.updateNoteById(note.getUuid(),editTextNoteName.getText().toString(),note.getDate(),editTextNoteBody.getText().toString());
             noteUpdater.update();
-            if (isLandscape)
+            if (!isLandscape)
             {
                 requireActivity().getSupportFragmentManager().popBackStack();
             }

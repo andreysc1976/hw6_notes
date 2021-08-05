@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 
 import java.util.Date;
@@ -53,7 +55,27 @@ public class NoteListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         noteListAdapter = new NoteListAdapter();
         recyclerView.setAdapter(noteListAdapter);
-        noteListAdapter.setListener(position -> showNote(Note.getNotes().get(position)));
+        //noteListAdapter.setListener(position -> showNote(Note.getNotes().get(position)));
+        noteListAdapter.setListener(position -> {
+            PopupMenu popupMenu = new PopupMenu(view.getContext(),view, Gravity.CENTER);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case (R.id.itemPopUpEdit):
+                            showNote(Note.getNotes().get(position));
+                            break;
+                        case(R.id.itemPopUpDelete):
+                            Note.deleteByIndex(position);
+                            noteListAdapter.notifyDataSetChanged();
+                            break;
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
+        });
 
 
 
@@ -82,8 +104,8 @@ public class NoteListFragment extends Fragment {
         noteFragment.setUpdater(() -> noteListAdapter.notifyDataSetChanged());
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainerNoteList,noteFragment)
                 .addToBackStack(null)
+                .replace(R.id.fragmentContainerNoteList,noteFragment)
                 .commit();
     }
 

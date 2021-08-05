@@ -71,6 +71,10 @@ public class Note implements Parcelable {
         }
     }
 
+    public static void deleteByIndex(int position) {
+        notes.remove(position);
+    }
+
     public String getName() {
         return name;
     }
