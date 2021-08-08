@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -68,7 +71,7 @@ public class NoteListFragment extends Fragment {
                             break;
                         case(R.id.itemPopUpDelete):
                             Note.deleteByIndex(position);
-                            noteListAdapter.notifyDataSetChanged();
+                            noteListAdapter.notifyItemRemoved(position);
                             break;
                     }
                     return false;
@@ -118,11 +121,18 @@ public class NoteListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case (R.id.addNoteMenuItem):
-                Note note = new Note(UUID.randomUUID(),"",new Date(),"");
+                Note note = new Note(UUID.randomUUID().toString(),"",new Date(),"");
                 showNote(note);
                 break;
+            case (R.id.logout):
+                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), MainActivity.gso);
+                mGoogleSignInClient.signOut();
         }
         return true;
+    }
+
+    public void notifyDataChange() {
+        noteListAdapter.notifyDataSetChanged();
     }
 
     interface NoteUpdater{
