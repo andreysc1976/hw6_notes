@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -121,6 +124,9 @@ public class NoteListFragment extends Fragment {
                 Note note = new Note(UUID.randomUUID().toString(),"",new Date(),"");
                 showNote(note);
                 break;
+            case (R.id.logout):
+                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), MainActivity.gso);
+                mGoogleSignInClient.signOut();
         }
         return true;
     }

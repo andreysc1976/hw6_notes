@@ -11,4 +11,5 @@
     <string name="hintNoteBody">Введите описание заметки</string>
     <string name="editMenuItem">Edit</string>
     <string name="deleteMenuItem">Delete</string>
+    <string name="logout">logout</string>
 </resources>
