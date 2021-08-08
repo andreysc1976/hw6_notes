@@ -16,16 +16,24 @@ public class Note implements Parcelable {
 
     private static ArrayList<Note> notes;
 
-    private UUID uuid;
+    private String uuid;
     private String name;
     private Date date;
     private String body;
 
     public Note(String name, Date date, String body) {
-        this(UUID.randomUUID(), name, date, body);
+        this(UUID.randomUUID().toString(), name, date, body);
     }
 
-    public Note(UUID uuid, String name, Date date, String body) {
+    public static void setNotes(ArrayList<Note> notes) {
+        Note.notes = notes;
+    }
+
+    public Note(){
+
+    }
+
+    public Note(String uuid, String name, Date date, String body) {
         this.uuid = uuid;
         this.name = name;
         this.date = date;
@@ -35,7 +43,7 @@ public class Note implements Parcelable {
     protected Note(Parcel in) {
         name = in.readString();
         body = in.readString();
-        uuid = UUID.fromString(in.readString());
+        uuid = in.readString();
         try {
             date = MyDateUtil.stringToDate(in.readString());
         } catch (ParseException e) {
@@ -55,7 +63,7 @@ public class Note implements Parcelable {
         }
     };
 
-    public static void updateNoteById(UUID uuid, String name, Date date, String body)
+    public static void updateNoteById(String uuid, String name, Date date, String body)
     {
         boolean finded = false;
         for (Note note:notes) {
@@ -69,9 +77,13 @@ public class Note implements Parcelable {
         if (!finded){
             notes.add(new Note(uuid,name,date,body));
         }
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        firebaseHelper.saveNote(new Note(uuid,name,date,body));
     }
 
     public static void deleteByIndex(int position) {
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        firebaseHelper.removeNote(notes.get(position));
         notes.remove(position);
     }
 
@@ -103,7 +115,7 @@ public class Note implements Parcelable {
         return notes;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
@@ -126,6 +138,12 @@ public class Note implements Parcelable {
         notes.add(new Note("где то в центре",date2,"Отмечаем серединную лекцию!"));
         notes.add(new Note("движемся к финишу",date2,"Осталось сдать где то около 10 контрольных и счасть наступит!!!"));
         notes.add(new Note("Ура!!!",date3,"Вот нам и выдали дипломы"));
+
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        for (Note note:notes)
+        {
+            firebaseHelper.saveNote(note);
+        }
     }
 
     public String getFormatedDate() {
@@ -144,7 +162,7 @@ public class Note implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(body);
-        dest.writeString(uuid.toString());
+        dest.writeString(uuid);
         dest.writeString(MyDateUtil.dateToString(date));
     }
 }

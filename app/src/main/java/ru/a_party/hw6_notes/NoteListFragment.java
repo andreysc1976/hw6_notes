@@ -68,7 +68,7 @@ public class NoteListFragment extends Fragment {
                             break;
                         case(R.id.itemPopUpDelete):
                             Note.deleteByIndex(position);
-                            noteListAdapter.notifyDataSetChanged();
+                            noteListAdapter.notifyItemRemoved(position);
                             break;
                     }
                     return false;
@@ -118,11 +118,15 @@ public class NoteListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case (R.id.addNoteMenuItem):
-                Note note = new Note(UUID.randomUUID(),"",new Date(),"");
+                Note note = new Note(UUID.randomUUID().toString(),"",new Date(),"");
                 showNote(note);
                 break;
         }
         return true;
+    }
+
+    public void notifyDataChange() {
+        noteListAdapter.notifyDataSetChanged();
     }
 
     interface NoteUpdater{

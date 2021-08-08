@@ -56,7 +56,7 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
 
     public static NoteFullFragment newInstance(Note note) {
         Bundle args = new Bundle();
-        args.putString(ARG_UUID, note.getUuid().toString());
+        args.putString(ARG_UUID, note.getUuid());
         args.putString(ARG_NAME, note.getName());
         args.putSerializable(ARG_DATE, note.getDate());
         NoteFullFragment fragment = new NoteFullFragment();
@@ -71,7 +71,7 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            UUID uuid = UUID.fromString(getArguments().getString(ARG_UUID));
+            String uuid = getArguments().getString(ARG_UUID);
             String name = getArguments().getString(ARG_NAME);
             Date date = (Date) getArguments().getSerializable(ARG_DATE);
 
