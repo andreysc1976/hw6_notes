@@ -14,4 +14,6 @@
     <string name="logout">logout</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="enterNoteName">Введите название заметки</string>
+    <string name="ok">Ok</string>
 </resources>
