@@ -1,11 +1,13 @@
 package ru.a_party.hw6_notes;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -43,7 +45,7 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
     // TODO: Rename and change types of parameters
     private Note note;
 
-    private EditText editTextNoteName;
+    private TextView editTextNoteName;
     private TextView textViewNoteDate;
     private EditText editTextNoteBody;
 
@@ -94,6 +96,29 @@ public class NoteFullFragment extends Fragment implements NoteListFragment.NoteU
         view.findViewById(R.id.textViewNoteDate).setOnClickListener(v -> new DatePickerDialog(getContext(), date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        view.findViewById(R.id.textViewNoteName).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater li = LayoutInflater.from(requireActivity());
+                View editNameView = li.inflate(R.layout.edit_text, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                builder.setView(editNameView);
+
+                EditText editName = editNameView.findViewById(R.id.editTextTextPersonName);
+
+                builder.setCancelable(false)
+                        .setTitle("Edit name")
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                editTextNoteName.setText(editName.getText().toString());
+                                note.setName(editName.getText().toString());
+                            }
+                        })
+                        .show();
+            }
+        });
 
         view.findViewById(R.id.buttonSave).setOnClickListener(v -> {
             Note.updateNoteById(note.getUuid(),editTextNoteName.getText().toString(),note.getDate(),editTextNoteBody.getText().toString());
