@@ -12,4 +12,6 @@
     <string name="editMenuItem">Edit</string>
     <string name="deleteMenuItem">Delete</string>
     <string name="logout">logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

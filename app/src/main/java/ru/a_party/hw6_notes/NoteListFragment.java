@@ -1,10 +1,12 @@
 package ru.a_party.hw6_notes;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,8 +72,19 @@ public class NoteListFragment extends Fragment {
                             showNote(Note.getNotes().get(position));
                             break;
                         case(R.id.itemPopUpDelete):
-                            Note.deleteByIndex(position);
-                            noteListAdapter.notifyItemRemoved(position);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                            builder
+                                    .setTitle("Удалить?")
+                                    .setMessage("Удалить элемент?")
+                                    .setCancelable(false)
+                                    .setNegativeButton(R.string.no, (dialog, which) -> {
+                                        //
+                                    })
+                                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                        Note.deleteByIndex(position);
+                                        noteListAdapter.notifyItemRemoved(position);
+                                    }).show();
+
                             break;
                     }
                     return false;
